@@ -6,9 +6,13 @@
     "lint": "tslint \"**/*.ts\" -e \"node_modules/**/*.ts\" -e \"typings/**/*.ts\" -e \"dist/**/*.ts\"",
     "prebuild": "npm run lint",
     "build": "tsc",
+    "preunittest": "npm run lint",
+    "unittest": "ts-node node_modules/mocha/bin/_mocha --reporter dot test/**/*.ts",
+    "precoverage": "npm run lint",
+    "coverage": "ts-node node_modules/istanbul/lib/cli.js cover -e .ts node_modules/mocha/bin/_mocha -- --reporter dot test/**/*.ts",
+    "pretest": "npm run coverage",
+    "test": "istanbul check-coverage coverage/coverage.raw.json",
     "prestart": "npm run build",
-    "pretest": "npm run lint",
-    "test": "mocha --opts mocha.opts",
     "start": "node ./bin/www"
   },
   "dependencies": {
@@ -24,6 +28,7 @@
     "sqlite3": "^3.1.4"
   },
   "devDependencies": {
+    "istanbul": "^1.1.0-alpha.1",
     "mocha": "^3.0.2",
     "ts-node": "^1.3.0",
     "tslint": "^3.15.1",
