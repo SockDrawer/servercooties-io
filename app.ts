@@ -1,10 +1,5 @@
 'use strict';
 
-import {Application} from '~express/lib/application';
-import {Request} from '~express/lib/request';
-import {Response} from '~express/lib/response';
-
-
 import * as express from 'express';
 import * as CookieParser from 'cookie-parser';
 import * as BodyParser from 'body-parser';
@@ -15,7 +10,7 @@ import {join as joinPath} from 'path';
 import {indexRouter as routes} from './routes/index';
 import {userRouter as users} from './routes/users';
 
-const app: Application = express();
+const app: express.Application = express();
 
 // view engine setup
 app.set('views', joinPath(__dirname, '../views'));
@@ -41,7 +36,7 @@ class RequestError extends Error {
 }
 
 // catch 404 and forward to error handler
-app.use((req: Request, res: Response, next: Function) => {
+app.use((req: express.Request, res: express.Response, next: Function) => {
     const err: RequestError = new RequestError('Not Found');
     err.status = 404;
     next(err);
@@ -52,7 +47,7 @@ app.use((req: Request, res: Response, next: Function) => {
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
-    app.use((err: RequestError, req: Request, res: Response) => {
+    app.use((err: RequestError, req: express.Request, res: express.Response) => {
         res.status(err.status || 500);
         res.render('error', {
             message: err.message,
@@ -63,7 +58,7 @@ if (app.get('env') === 'development') {
 
 // production error handler
 // no stacktraces leaked to user
-app.use((err: RequestError, req: Request, res: Response) => {
+app.use((err: RequestError, req: express.Request, res: express.Response) => {
     res.status(err.status || 500);
     res.render('error', {
         message: err.message,

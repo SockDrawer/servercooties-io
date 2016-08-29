@@ -1,87 +1,74 @@
 'use strict';
-/// <reference path="typings/modules/promise/index.d.ts">
 
-import * as sqlite from 'sqlite3';
+/// <reference path="../typings/index.d.ts" />
 
-interface NullParameter {}
-interface Resolver<T> {
-    (value: T): void;
+import {Database as SqliteDB} from 'sqlite3';
+
+export interface RunResult {
+    lastID: number;
 }
-interface Rejector {
-    (reason: Error): void;
-}
-
 
 export class Database {
-    public activated: boolean;
+    public active: boolean;
     private dbName: string;
-    private db: sqlite.Database;
+    private db: SqliteDB;
 
     public constructor(dbName: string) {
-        this.activated = false;
         this.dbName = dbName;
         this.db = null;
+        this.active = false;
     }
     public activate(): Promise<{}> {
-        if (this.activated) {
+        if (this.active) {
             return Promise.resolve(undefined);
         }
         return new Promise((resolve, reject) => {
-            this.db = new sqlite.Database(this.dbName, (err: Error): void => {
-                this.activated = true;
+            this.db = new SqliteDB(this.dbName, (err: Error): void => {
                 if (err) {
                     return reject(err);
                 }
+                this.active = true;
                 return resolve(undefined);
             });
         });
     }
 
-    public run(query: string, params: {}): Promise<{}> {
+    // tslint:disable-next-line:no-any
+    public run(query: string, params: any): Promise<RunResult> {
         return this.runQuery('run', query, params);
     }
 
-    public exec(query: string): Promise<{}> {
+    // tslint:disable-next-line:no-any
+    public exec(query: string): Promise<any> {
         return this.runQuery('exec', query, undefined);
     }
 
-    public all(query: string, params: {}): Promise<{}> {
+    // tslint:disable-next-line:no-any
+    public all(query: string, params: any): Promise<any> {
         return this.runQuery('all', query, params);
     }
 
-    public get(query: string, params: {}): Promise<{}> {
+    // tslint:disable-next-line:no-any
+    public get(query: string, params: any): Promise<any> {
         return this.runQuery('get', query, params);
     }
 
-    private runQuery(func: string, query: string, params: {}): Promise<{}> {
+    // tslint:disable-next-line:no-any
+    private runQuery<T>(func: string, query: string, params: any): Promise<T> {
         return this.activate().then(() => {
             return new Promise((resolve, reject) => {
-                return reject(4);
-                /*
-                // NB. We want to capture the 'this' value of the callback as sqlite will pass information back to the
-                //     callback via this method
-                // tslint:disable-next-line:only-arrow-functions
-                function after(err, res) {
+                // tslint:disable-next-line:only-arrow-functions no-any
+                function after(err: Error, res: any): void {
                     if (err) {
                         return reject(err);
                     }
-                    return resolve(res || func !== 'run' ? res : this);
+                    return resolve(res || func !== 'run' ? res : this); //eslint-disable-line no-invalid-this
                 }
-                switch(func){
-                    case 'run':
-                        this.db.run(query, params, after);
-                        break;
-                    case 'all':
-                        this.db.all(query, params, after);
-                        break
-                    case 'get':
-                        this.db.get(query, params, after);
-                        break;
-                    case 'exec':
-                    default:
-                        this.db.exec(query, (err: Error) => after(err, undefined));
-                        break;
-                }*/
+                if (func === 'exec') {
+                    this.db.exec(query, (err: Error) => after(err, undefined));
+                } else {
+                    this.db[func](query, params, after);
+                }
             });
         });
     }
