@@ -1,9 +1,13 @@
-var express = require('express');
-var router = express.Router();
+import {Response} from '~express/lib/response';
+import {Request} from '~express/lib/request';
+import {Router} from '~express/lib/router/index';
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
+import * as express from 'express';
+// const express = require('express');
+
+export const userRouter: Router = express.Router();
+
+/* GET home page. */
+userRouter.get('/', (req: Request, res: Response) => {
+    res.send('respond with a resource');
 });
-
-module.exports = router;
