@@ -1,15 +1,16 @@
-import {Express} from '~express/lib/express';
+'use strict';
+
 import {Application} from '~express/lib/application';
 import {Request} from '~express/lib/request';
 import {Response} from '~express/lib/response';
-import {Morgan} from 'morgan';
+
+
+import * as express from 'express';
 import * as CookieParser from 'cookie-parser';
 import * as BodyParser from 'body-parser';
+import * as Morgan from 'morgan';
 
 import {join as joinPath} from 'path';
-
-const express: Express = require('express');
-const logger: Morgan = require('morgan');
 
 import {indexRouter as routes} from './routes/index';
 import {userRouter as users} from './routes/users';
@@ -20,11 +21,16 @@ const app: Application = express();
 app.set('views', joinPath(__dirname, '../views'));
 app.set('view engine', 'hbs');
 
-app.use(logger('dev'));
+app.use(Morgan('dev'));
 app.use(BodyParser.json());
 app.use(BodyParser.urlencoded({extended: false}));
 app.use(CookieParser());
+
+// TODO: less-middleware is being mean to me. Figure out why i can't import it later. (i'm probably using the wrong syntax)
+// tslint:disable-next-line:no-require-imports
 app.use(require('less-middleware')(joinPath(__dirname, 'public')));
+
+// Serve static files (for dev. nginx should do this in prod)
 app.use(express.static(joinPath(__dirname, 'public')));
 
 app.use('/', routes);
