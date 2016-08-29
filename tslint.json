@@ -18,14 +18,7 @@
     "no-namespace": true,
     "no-var-requires": true,
     "only-arrow-functions": true,
-    "typedef": [
-      true,
-      "call-signature",
-      "parameter",
-      "property-declaration",
-      "variable-declaration",
-      "member-variable-declaration"
-    ],
+    "typedef": [true],
     "typedef-whitespace": true,
     "curly": true,
     "forin": true,
@@ -52,7 +45,6 @@
     "no-unused-new": true,
     "no-unused-variable": false,
     "no-use-before-declare": true,
-    "no-var-keyword": true,
     "no-require-imports": true,
     "radix": true,
     "switch-default": true,

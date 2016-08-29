@@ -1,5 +1,4 @@
 'use strict';
-
 /// <reference path="../typings/index.d.ts" />
 
 import {Database as SqliteDB} from 'sqlite3';
