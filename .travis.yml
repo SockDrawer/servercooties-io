@@ -1,0 +1,16 @@
+language: node_js
+node_js:
+- node
+- '4'
+- '6'
+branches:
+  except:
+  - "/^(?i:v)\\d+[.]\\d+[.]\\d+$/"
+before_script:
+- npm prune
+- rm -rf ./coverage
+script:
+- npm test
+notifications:
+  slack:
+    secure: Oawhm5XI1zOWwMRq8ggIHQZZi+Xb23dSIU4mD5xpiSAfkp2/tLWwAVQeUzzoA1OVMHFt6BCANfrKOXb3NniOIqpmXPe/53dRliZmF1AcxzT1INTO/IvNAE0CxcQZlzuimV+fniqFGLtXvcNGCJJ+BcORw4I5/CZ9oqg3v1SHhxkHebAKW7vD1sSSL8vHu0SwelfYKsJ8X+GDwydhczhTHoJypCFGhTOVeZ2YAlS6xA4NuNJbbgBXyTU1qZh/RxUQZd5Yb/ufnjusNzLx3cHdeSWx1lfgYJz5W1WIxBixg7Ppojp1OMGBbCyVeJBfNggnkP80F3/uk2mMDSQRCI7E9EZ0HmULfvnaD1PWg76SWdmqzk4EwOBrO6V/BzdCk7Y7F74gDLOD9d0d28y9tysk+MVzQpOz1VinkzkBwr80R0tvRHxQ2t49/87LouZP2RiZedg791rE6BRzDbbkxRwLbN29pv8Ip/dqlaUVju6usFfk9kt7a/D5UWsTfmsExdeX7HN4Andvtw14QM+nI0W9w9tQcYgu+YlVCd2y8SbLPzGxAuFKMv96GEl1Gmv4ACPeF2DuEnX3Qi/KlQX6jtsjQ4O3pFZpU7nT6LQ6SkBVRnkZmPcJPaEn8EDDW0bR++EZvmoqwZtOhZeGLAJP+BO0Qb/0eO2ZpNV1tI/9M1mTtPA=
