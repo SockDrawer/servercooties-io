@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "lint": "tslint --project tslint.json --type-check \"**/*.ts\" -e \"node_modules/**/*.ts\" -e \"typings/**/*.ts\" -e \"dist/**/*.ts\"",
+    "lint": "tslint \"**/*.ts\" -e \"node_modules/**/*.ts\" -e \"typings/**/*.ts\" -e \"dist/**/*.ts\"",
     "prebuild": "npm run lint",
     "build": "tsc",
     "preunittest": "npm run lint",
