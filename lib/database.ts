@@ -1,16 +1,22 @@
 'use strict';
-/// <reference path="../typings/index.d.ts" />
 
-import {Database as SqliteDB} from 'sqlite3';
+import * as sqlite from 'sqlite3';
 
 export interface RunResult {
     lastID: number;
 }
 
+interface Resolver<T> {
+    (value: T): void;
+}
+interface Rejector {
+    (err: Error): void;
+}
+
 export class Database {
     public active: boolean;
     private dbName: string;
-    private db: SqliteDB;
+    private db: sqlite.Database;
 
     public constructor(dbName: string) {
         this.dbName = dbName;
@@ -21,8 +27,8 @@ export class Database {
         if (this.active) {
             return Promise.resolve(undefined);
         }
-        return new Promise((resolve, reject) => {
-            this.db = new SqliteDB(this.dbName, (err: Error): void => {
+        return new Promise((resolve: Resolver<{}>, reject: Rejector): void => {
+            this.db = new sqlite.Database(this.dbName, (err: Error): void => {
                 if (err) {
                     return reject(err);
                 }
@@ -55,7 +61,7 @@ export class Database {
     // tslint:disable-next-line:no-any
     private runQuery<T>(func: string, query: string, params: any): Promise<T> {
         return this.activate().then(() => {
-            return new Promise((resolve, reject) => {
+            return new Promise((resolve: Resolver<{}>, reject: Rejector): void => {
                 // tslint:disable-next-line:only-arrow-functions no-any
                 function after(err: Error, res: any): void {
                     if (err) {

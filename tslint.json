@@ -7,8 +7,7 @@
       "check-constructor"
     ],
     "member-ordering": [
-      true,
-      {
+      true, {
         "order": "statics-first"
       }
     ],
@@ -18,7 +17,14 @@
     "no-namespace": true,
     "no-var-requires": true,
     "only-arrow-functions": true,
-    "typedef": [true],
+    "typedef": [true,
+      "call-signature",
+      "arrow-call-signature",
+      "parameter",
+      "arrow-parameter",
+      "property-declaration",
+      "member-variable-declaration"
+    ],
     "typedef-whitespace": true,
     "curly": true,
     "forin": true,
@@ -46,9 +52,10 @@
     "no-unused-variable": false,
     "no-use-before-declare": true,
     "no-require-imports": true,
+    "no-var-keyword": true,
     "radix": true,
     "switch-default": true,
-    "triple-equals":true,
+    "triple-equals": true,
     "use-isnan": true,
     "use-strict": true,
     "eofline": true,
