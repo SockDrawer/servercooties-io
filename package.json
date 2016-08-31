@@ -10,7 +10,6 @@
     "unittest": "ts-node node_modules/mocha/bin/_mocha --reporter dot test/**/*.ts",
     "precoverage": "npm run build",
     "coverage": "ts-node node_modules/istanbul/lib/cli.js cover -e .ts node_modules/mocha/bin/_mocha -- --reporter dot test/**/*.ts",
-    "postcoverage": "remap-istanbul -i coverage/coverage.raw.json -o coverage/lcov-report -t lcovonly",
     "pretest": "npm run coverage",
     "test": "true",
     "stricttest": "istanbul check-coverage coverage/coverage.raw.json",
