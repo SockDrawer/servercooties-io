@@ -15,8 +15,8 @@ interface Rejector {
 
 export class Database {
     public active: boolean;
-    private dbName: string;
-    private db: sqlite.Database;
+    public dbName: string;
+    public db: sqlite.Database;
 
     public constructor(dbName: string) {
         this.dbName = dbName;
@@ -59,7 +59,7 @@ export class Database {
     }
 
     // tslint:disable-next-line:no-any
-    private runQuery<T>(func: string, query: string, params: any): Promise<T> {
+    public runQuery<T>(func: string, query: string, params: any): Promise<T> {
         return this.activate().then(() => {
             return new Promise((resolve: Resolver<{}>, reject: Rejector): void => {
                 // tslint:disable-next-line:only-arrow-functions no-any
