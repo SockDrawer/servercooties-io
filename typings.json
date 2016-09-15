@@ -5,5 +5,8 @@
   },
   "globalDependencies": {
     "node": "registry:dt/node#6.0.0+20160826120425"
+  },
+  "globalDevDependencies": {
+    "sinon-as-promised": "registry:dt/sinon-as-promised#4.0.0+20160618172117"
   }
 }

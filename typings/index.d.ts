@@ -7,6 +7,7 @@
 /// <reference path="globals/morgan/index.d.ts" />
 /// <reference path="globals/node/index.d.ts" />
 /// <reference path="globals/serve-static/index.d.ts" />
+/// <reference path="globals/sinon-as-promised/index.d.ts" />
 /// <reference path="globals/sinon/index.d.ts" />
 /// <reference path="globals/sqlite3/index.d.ts" />
 /// <reference path="modules/chai-as-promised/index.d.ts" />

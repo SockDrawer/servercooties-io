@@ -1,7 +1,5 @@
 'use strict';
 
-//import {ChaiPromised} from 'chai-as-promised';
-
 import * as chaiAsPromised from 'chai-as-promised';
 import * as chai from 'chai';
 
@@ -9,6 +7,8 @@ chai.use(chaiAsPromised);
 chai.should();
 
 import * as sinon from 'sinon';
+//tslint:disable-next-line:no-require-imports
+require('sinon-as-promised');
 
 import * as sqlite from 'sqlite3';
 
@@ -75,19 +75,138 @@ describe('DB', () => {
             return db.activate().should.eventually.be.rejectedWith(error);
         });
     });
-    describe('get()', () => {
-        let sandbox: Sinon.SinonSandbox = null;
+    describe('runQuery<T>()', () => {
+        let sandbox: Sinon.SinonSandbox = null,
+            db: Database = null,
+            dbAll: Sinon.SinonStub,
+            dbExec: Sinon.SinonStub,
+            dbGet: Sinon.SinonStub,
+            dbRun: Sinon.SinonStub,
+            dbActivate: Sinon.SinonStub,
+            stubs: Map<string, Sinon.SinonStub> = new Map<string, Sinon.SinonStub>([
+                ['run', null],
+                ['get', null],
+                ['exec', null],
+                ['all', null],
+                ['activate', null],
+            ]);
         beforeEach(() => {
+            db = new Database(':memory:');
             sandbox = sinon.sandbox.create();
+            return db.activate().then(() => {
+                stubs.set('run', sandbox.stub(db.db, 'run').yields());
+                stubs.set('all', sandbox.stub(db.db, 'all').yields());
+                stubs.set('get', sandbox.stub(db.db, 'get').yields());
+                stubs.set('exec', sandbox.stub(db.db, 'exec').yields());
+                stubs.set('activate', sandbox.stub(db, 'activate').resolves(undefined));
+            });
         });
         afterEach(() => {
             sandbox.restore();
         });
-        it('should allow mocking', () => {
-            let obj = new Database('foo');
-            const spy = sandbox.stub(obj, 'runQuery');
-            obj.get('', '');
-            spy.callCount.should.equal(1);
+        for (let name of stubs.keys()) {
+            if (name === 'activate') {
+                return;
+            }
+            it(`should activate the db instance when executing ${name}`, () => {
+                return db.runQuery(name, 'foo', [4]).then(() => {
+                    stubs.get('activate').callCount.should.equal(1);
+                });
+            });
+            it(`should proxy query to db.${name}`, () => {
+                const query = `query${Math.random()}query`,
+                    params = [`params${Math.random()}params`];
+                return db.runQuery(name, query, params).then(() => {
+                    if (name !== 'exec') {
+                        stubs.get(name).calledWith(query, params).should.be.equal(true);
+                    } else {
+                        stubs.get(name).calledWith(query).should.be.equal(true);
+                    }
+                });
+            });
+            if (name !== 'exec') {
+                it('should resolve to results of query', () => {
+                    const result = [Math.random()];
+                    stubs.get(name).yields(null, result);
+                    return db.runQuery(name, '', '').should.eventually.equal(result);
+                });
+            }
+            it('should reject with error', () => {
+                const result = new Error(`foo ${Math.random()}`);
+                stubs.get(name).yields(result);
+                return db.runQuery(name, '', '').should.eventually.be.rejectedWith(result);
+            });
+        }
+    });
+    ['get', 'run', 'all'].forEach((name: string) => {
+        describe(`${name}()`, () => {
+            let sandbox: Sinon.SinonSandbox = null,
+                runQuery: Sinon.SinonStub = null,
+                db: Database = null;
+            beforeEach(() => {
+                sandbox = sinon.sandbox.create();
+                db = new Database(':memory:');
+                runQuery = sandbox.stub(db, 'runQuery').resolves(undefined);
+            });
+            afterEach(() => {
+                sandbox.restore();
+            });
+            it('should proxy request to runQuery', () => {
+                return db[name]('', '').then(() => {
+                    runQuery.callCount.should.equal(1);
+                });
+            });
+            it('should pass expected parameters to runQuery', () => {
+                const query = `query${Math.random()}query`,
+                    params = [`params${Math.random()}params`];
+                return db[name](query, params).then(() => {
+                    runQuery.calledWith(name, query, params).should.equal(true);
+                });
+            });
+            it('should resolve to results of query', () => {
+                const result = `result${Math.random()}result`;
+                runQuery.resolves(result);
+                return db[name]('', '').should.eventually.equal(result);
+            });
+            it('should reject when query rejects', () => {
+                const result = new Error(`result${Math.random()}result`);
+                runQuery.rejects(result);
+                return db[name]('', '').should.eventually.be.rejectedWith(result);
+            });
+        });
+    });
+    describe(`exec()`, () => {
+        let sandbox: Sinon.SinonSandbox = null,
+            runQuery: Sinon.SinonStub = null,
+            db: Database = null;
+        beforeEach(() => {
+            sandbox = sinon.sandbox.create();
+            db = new Database(':memory:');
+            runQuery = sandbox.stub(db, 'runQuery').resolves(undefined);
+        });
+        afterEach(() => {
+            sandbox.restore();
+        });
+        it('should proxy request to runQuery', () => {
+            return db.exec('').then(() => {
+                runQuery.callCount.should.equal(1);
+            });
+        });
+        it('should pass expected parameters to runQuery', () => {
+            const query = `query${Math.random()}query`;
+            return db.exec(query).then(() => {
+                runQuery.calledWith('exec', query).should.equal(true);
+            });
+        });
+        it('should resolve to results of query', () => {
+            const result = `result${Math.random()}result`;
+            runQuery.resolves(result);
+            return db.exec('').should.eventually.equal(result);
+        });
+        it('should reject when query rejects', () => {
+            const result = new Error(`result${Math.random()}result`);
+            runQuery.rejects(result);
+            return db.exec('').should.eventually.be.rejectedWith(result);
         });
     });
 });

@@ -1,0 +1,8 @@
+{
+  "resolution": "main",
+  "tree": {
+    "src": "https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/0f5d541ed332eb6165e1d6488a900c1bac0c3da8/sinon-as-promised/sinon-as-promised.d.ts",
+    "raw": "registry:dt/sinon-as-promised#4.0.0+20160618172117",
+    "typings": "https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/0f5d541ed332eb6165e1d6488a900c1bac0c3da8/sinon-as-promised/sinon-as-promised.d.ts"
+  }
+}
