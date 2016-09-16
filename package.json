@@ -11,8 +11,7 @@
     "precoverage": "npm run build",
     "coverage": "ts-node node_modules/istanbul/lib/cli.js cover -e .ts node_modules/mocha/bin/_mocha -- --reporter dot test/**/*.ts",
     "pretest": "npm run coverage",
-    "test": "true",
-    "stricttest": "istanbul check-coverage coverage/coverage.raw.json",
+    "test": "istanbul check-coverage coverage/coverage.raw.json",
     "prestart": "npm run build",
     "start": "node ./bin/www"
   },

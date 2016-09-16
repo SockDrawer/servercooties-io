@@ -2,7 +2,7 @@ verbose: false
 instrumentation:
     compact: false
     preserve-comments: true
-    excludes: ["dist/**", "test/**", "**/*.d.ts", "**/*.spec.ts"]
+    excludes: ["app.ts", "dist/**", "test/**", "**/*.d.ts", "**/*.spec.ts"]
     include-all-sources: true
 reporting:
     print: both

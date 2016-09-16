@@ -4,13 +4,14 @@ import * as express from 'express';
 import * as CookieParser from 'cookie-parser';
 import * as BodyParser from 'body-parser';
 import * as Morgan from 'morgan';
-
 import {join as joinPath} from 'path';
-
-import {indexRouter as routes} from './routes/index';
-import {userRouter as users} from './routes/users';
+import {init as indexInit, router as indexRouter} from './routes/index';
+import {init as userInit, router as userRouter} from './routes/users';
 
 const app: express.Application = express();
+
+indexInit();
+userInit();
 
 // view engine setup
 app.set('views', joinPath(__dirname, '../views'));
@@ -28,8 +29,8 @@ app.use(require('less-middleware')(joinPath(__dirname, 'public')));
 // Serve static files (for dev. nginx should do this in prod)
 app.use(express.static(joinPath(__dirname, 'public')));
 
-app.use('/', routes);
-app.use('/users', users);
+app.use('/', indexRouter);
+app.use('/users', userRouter);
 
 class RequestError extends Error {
     public status: number;
