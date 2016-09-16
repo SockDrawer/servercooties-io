@@ -1,0 +1,12 @@
+{
+  "ignore": [
+    "typings/**",
+    "**/node_modules/**",
+    "**/**-min-**",
+    "**/**-min.**",
+    "**/**.min.**"
+  ],
+  "test": [
+    "test/**"
+  ]
+}
