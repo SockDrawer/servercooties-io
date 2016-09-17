@@ -8,13 +8,16 @@ import {join as joinPath} from 'path';
 import {init as indexInit, router as indexRouter} from './routes/index';
 import {init as userInit, router as userRouter} from './routes/users';
 
+//tslint:disable-next-line:no-require-imports
+const lessMiddleware = require('less-middleware');
+
 const app: express.Application = express();
 
 indexInit();
 userInit();
 
 // view engine setup
-app.set('views', joinPath(__dirname, '../views'));
+app.set('views', joinPath(__dirname, '..', 'views'));
 app.set('view engine', 'hbs');
 
 app.use(Morgan('dev'));
@@ -22,12 +25,8 @@ app.use(BodyParser.json());
 app.use(BodyParser.urlencoded({extended: false}));
 app.use(CookieParser());
 
-// TODO: less-middleware is being mean to me. Figure out why i can't import it later. (i'm probably using the wrong syntax)
-// tslint:disable-next-line:no-require-imports
-app.use(require('less-middleware')(joinPath(__dirname, 'public')));
-
-// Serve static files (for dev. nginx should do this in prod)
-app.use(express.static(joinPath(__dirname, 'public')));
+app.use('/public', lessMiddleware(joinPath(__dirname, '..', 'public')));
+app.use('/public', express.static(joinPath(__dirname, '..', 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', userRouter);

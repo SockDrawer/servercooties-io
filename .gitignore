@@ -41,3 +41,6 @@ jspm_packages
 
 # Build Files
 dist
+
+# less compiled css
+public/stylesheets/*.css
