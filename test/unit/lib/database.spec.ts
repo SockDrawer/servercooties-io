@@ -7,8 +7,8 @@ chai.use(chaiAsPromised);
 chai.should();
 
 import * as sinon from 'sinon';
-//tslint:disable-next-line:no-require-imports
-require('sinon-as-promised');
+
+import 'sinon-as-promised';
 
 import * as sqlite from 'sqlite3';
 

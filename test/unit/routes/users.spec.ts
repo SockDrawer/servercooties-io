@@ -7,8 +7,8 @@ import {router, init} from '../../../routes/users';
 chai.use(chaiAsPromised);
 chai.should();
 
-//tslint:disable-next-line:no-require-imports
-require('sinon-as-promised');
+
+import 'sinon-as-promised';
 
 interface Route {
     (req: express.Request, res: express.Response): void;
