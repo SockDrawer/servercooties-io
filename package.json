@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "init": "validate-commit-msg",
     "lint": "tslint \"**/*.ts\" -e \"node_modules/**/*.ts\" -e \"typings/**/*.ts\" -e \"dist/**/*.ts\"",
     "prebuild": "npm run lint",
     "build": "tsc",
@@ -13,7 +14,8 @@
     "pretest": "npm run coverage",
     "test": "istanbul check-coverage coverage/coverage.raw.json",
     "prestart": "npm run build",
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "commit": "git-cz"
   },
   "dependencies": {
     "body-parser": "~1.15.1",
@@ -27,14 +29,29 @@
     "sqlite3": "^3.1.4"
   },
   "devDependencies": {
-    "istanbul": "^1.1.0-alpha.1",
     "chai": "^3.5.0",
     "chai-as-promised": "^6.0.0",
+    "commitizen": "^2.8.6",
+    "cz-conventional-changelog": "^1.2.0",
+    "ghooks": "^1.3.2",
+    "istanbul": "^1.1.0-alpha.1",
     "mocha": "^3.0.2",
     "sinon": "^1.17.5",
     "sinon-as-promised": "^4.0.2",
     "ts-node": "^1.3.0",
     "tslint": "^4.0.1",
-    "typescript": "^2.0.10"
+    "typescript": "^2.0.10",
+    "validate-commit-msg": "^2.8.2"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    },
+    "ghooks": {
+      "commit-msg": "validate-commit-msg",
+      "pre-push": "npm test",
+      "post-merge": "npm install",
+      "post-rewrite": "npm install"
+    }
   }
 }

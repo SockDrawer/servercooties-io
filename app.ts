@@ -36,7 +36,7 @@ class RequestError extends Error {
 }
 
 // catch 404 and forward to error handler
-app.use((req: express.Request, res: express.Response, next: Function) => {
+app.use((_: express.Request, __: express.Response, next: Function) => {
     const err: RequestError = new RequestError('Not Found');
     err.status = 404;
     next(err);
@@ -47,7 +47,7 @@ app.use((req: express.Request, res: express.Response, next: Function) => {
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
-    app.use((err: RequestError, req: express.Request, res: express.Response) => {
+    app.use((err: RequestError, _: express.Request, res: express.Response) => {
         res.status(err.status || 500);
         res.render('error', {
             message: err.message,
@@ -58,7 +58,7 @@ if (app.get('env') === 'development') {
 
 // production error handler
 // no stacktraces leaked to user
-app.use((err: RequestError, req: express.Request, res: express.Response) => {
+app.use((err: RequestError, _: express.Request, res: express.Response) => {
     res.status(err.status || 500);
     res.render('error', {
         message: err.message,

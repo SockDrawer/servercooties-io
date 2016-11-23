@@ -33,7 +33,7 @@ describe('index', () => {
             getIndex: Route;
         beforeEach(() => {
             sandbox = sinon.sandbox.create();
-            const stub = sandbox.stub(router, 'get', (ign: string, r: Route) => {
+            const stub = sandbox.stub(router, 'get', (_: string, r: Route) => {
                 getIndex = r;
             });
             init();

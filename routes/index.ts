@@ -5,7 +5,7 @@ const router: express.Router = express.Router();
 
 const init = (): void => {
     /* GET home page. */
-    router.get('/', (req: express.Request, res: express.Response) => {
+    router.get('/', (_: express.Request, res: express.Response) => {
         res.render('index', {title: 'Express'});
     });
 };

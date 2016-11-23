@@ -4,7 +4,9 @@
     "target": "es6",
     "sourceMap": true,
     "declaration": true,
-    "outDir": "./dist/"
+    "outDir": "./dist/",
+    "noUnusedParameters": true,
+    "noUnusedLocals": true
   },
   "exclude": [
     "node_modules",

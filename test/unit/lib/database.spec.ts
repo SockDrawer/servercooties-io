@@ -62,6 +62,7 @@ describe('DB', () => {
         });
         it('should noop activate() on success', () => {
             return db.activate().then(() => {
+                db.active.should.equal(true);
                 dbConstructor.reset(); // this wac called on initial, reset it
                 return db.activate();
             }).then(() => {
@@ -69,20 +70,16 @@ describe('DB', () => {
             });
         });
         it('should not noop activate() on failure', () => {
-            const original = db.activate,
-                error = new Error('foo!');
+            const error = new Error('foo!');
             dbConstructor.yields(error);
-            return db.activate().should.eventually.be.rejectedWith(error);
+            return db.activate().should.eventually.be.rejectedWith(error).then(() => {
+                db.active.should.equal(false);
+            });
         });
     });
     describe('runQuery<T>()', () => {
         let sandbox: Sinon.SinonSandbox = null,
             db: Database = null,
-            dbAll: Sinon.SinonStub,
-            dbExec: Sinon.SinonStub,
-            dbGet: Sinon.SinonStub,
-            dbRun: Sinon.SinonStub,
-            dbActivate: Sinon.SinonStub,
             stubs: Map<string, Sinon.SinonStub> = new Map<string, Sinon.SinonStub>([
                 ['run', null],
                 ['get', null],
