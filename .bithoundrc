@@ -11,6 +11,6 @@
   ],
   "dependencies": {
     "unused-ignores": ["hbs"],
-    "mute": ["hbs"]
+    "mute": []
   }
 }
