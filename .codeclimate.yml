@@ -7,8 +7,6 @@ engines:
       - typescript
       - javascript
     exclude_fingerprints:
-  tslint:
-    enabled: true
   fixme:
     enabled: true
 ratings:
