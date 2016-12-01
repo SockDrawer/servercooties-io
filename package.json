@@ -41,6 +41,7 @@
     "sinon": "^1.17.5",
     "sinon-as-promised": "^4.0.2",
     "ts-node": "^1.3.0",
+    "tsd": "^0.6.5",
     "tslint": "^4.0.1",
     "typescript": "^2.0.10",
     "validate-commit-msg": "^2.8.2"
