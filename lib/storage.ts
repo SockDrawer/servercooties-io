@@ -54,6 +54,7 @@ export class Storage {
                 ')', {}))
             .then(() => {
                 this.active = true;
+                return {};
         });
     }
 
