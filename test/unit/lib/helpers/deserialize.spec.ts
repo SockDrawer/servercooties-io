@@ -13,6 +13,31 @@ chai.should();
 import {Deserialize} from '../../../../lib/helpers/deserialize';
 
 describe('Deserialize', () => {
+    describe('boolean', () => {
+        it('should return boolean value', () => {
+            const expected = Math.random() > 0.5,
+                data = {name: expected};
+            Deserialize.boolean(data, 'name').should.equal(expected);
+        });
+        it('should return default value', () => {
+            const expected = Math.random() > 0.5,
+                data = {};
+            Deserialize.boolean(data, 'name', expected).should.equal(expected);
+        });
+        it('should throw when value missing and no default', () => {
+            const name = `name ${Math.random()}`,
+                data = {},
+                expected = `Field ${name} is required`;
+            chai.expect(() => Deserialize.boolean(data, name)).to.throw(expected);
+        });
+        it('should throw when value is not a boolean', () => {
+            const name = `name ${Math.random()}`,
+                data = {},
+                expected = `Field ${name} must be a boolean`;
+            data[name] = 42;
+            chai.expect(() => Deserialize.boolean(data, name)).to.throw(expected);
+        });
+    });
     describe('string', () => {
         it('should return string value', () => {
             const expected = `data ${Math.random()}`,

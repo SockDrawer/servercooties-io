@@ -1,19 +1,36 @@
 //tslint:disable:next-line no-any
 export class Deserialize {
-    public static string (data: any, name: string, defaultValue?: string): string {
-        if (!data[name]) {
+    public static byName (data: any, name: string): any {
+        return data !== undefined ? data[name] : undefined;
+    }
+    public static boolean (data: any, name: string, defaultValue?: boolean): boolean {
+        const value = Deserialize.byName(data, name);
+        if (value === undefined) {
             if (defaultValue === undefined) {
                 throw new Error(`Field ${name} is required`);
             }
-        } else if (typeof data[name] !== 'string') {
+            return defaultValue;
+        }
+        if (typeof value !== 'boolean') {
+            throw new Error(`Field ${name} must be a boolean`);
+        }
+        return value;
+    }
+    public static string (data: any, name: string, defaultValue?: string): string {
+        const value = Deserialize.byName(data, name);
+        if (!value) {
+            if (defaultValue === undefined) {
+                throw new Error(`Field ${name} is required`);
+            }
+        } else if (typeof value !== 'string') {
             throw new Error(`Field ${name} must be a string`);
         }
-        return data[name] || defaultValue;
+        return value || defaultValue;
     }
     public static number (data: any, name: string, minValue?: number, maxValue?: number, defaultValue?: number): number {
         minValue = minValue !== undefined ? minValue : 0;
         maxValue = maxValue !== undefined ? maxValue : 100;
-        let value = data[name];
+        let value = Deserialize.byName(data, name);
         if (value === undefined) {
             if (defaultValue === undefined) {
                 throw new Error(`Field ${name} is required`);
@@ -29,17 +46,19 @@ export class Deserialize {
         return value;
     }
     public static list (data: any, name: string, defaultValue?: string[]): string[] {
-        if (!data[name]) {
+        const value = Deserialize.byName(data, name);
+        if (!value) {
             if (defaultValue === undefined) {
                 throw new Error(`Field ${name} is required`);
             }
-        } else if (!Array.isArray(data[name]) || data[name].some((elem: any) => typeof elem !== 'string')) {
+        } else if (!Array.isArray(value) || value.some((elem: any) => typeof elem !== 'string')) {
             throw new Error(`Field ${name} must be an array of string`);
         }
-        return data[name] || defaultValue;
+        return value || defaultValue;
     }
     public static map (data: any, name: string, defaultValue?: Map<string, string>): Map<string, string> {
-        if (!data[name]) {
+        const value = Deserialize.byName(data, name);
+        if (!value) {
             if (defaultValue === undefined) {
                 throw new Error(`Field ${name} is required`);
             }
@@ -47,13 +66,12 @@ export class Deserialize {
         }
         const result = new Map<string, string>();
         if (defaultValue !== undefined) {
-            defaultValue.forEach((value: string, key: string) => {
-                result.set(key, value);
+            defaultValue.forEach((ivalue: string, key: string) => {
+                result.set(key, ivalue);
             });
         }
-        const obj = data[name];
-        Object.keys(obj).forEach((key: string) => {
-            result.set(key, `${obj[key]}`);
+        Object.keys(value).forEach((key: string) => {
+            result.set(key, `${value[key]}`);
         });
         return result;
     }
