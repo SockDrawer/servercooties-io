@@ -5,6 +5,7 @@
 /// <reference path="globals/cookie-parser/index.d.ts" />
 /// <reference path="globals/express-serve-static-core/index.d.ts" />
 /// <reference path="globals/express/index.d.ts" />
+/// <reference path="globals/js-yaml/index.d.ts" />
 /// <reference path="globals/mime/index.d.ts" />
 /// <reference path="globals/mocha/index.d.ts" />
 /// <reference path="globals/morgan/index.d.ts" />
