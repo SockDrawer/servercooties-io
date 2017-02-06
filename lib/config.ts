@@ -23,8 +23,8 @@ export class CheckConfig {
         return result;
     }
 
-    public name: string = '';
-    public rootUri: string = '';
+    public name = '';
+    public rootUri = '';
     public servers: string[] = [];
     public endpoints: string[] = [];
     public customHeaders: Map<string, string> = new Map<string, string>([
@@ -32,13 +32,13 @@ export class CheckConfig {
         ['User-Agent', 'Servercooties.io Crawler; https://github.com/SockDrawer/servercooties-io'],
         ['Servercooties-Target-Server', '%server%']
     ]);
-    public uriTemplate: string = '%rootUri%/%endpoint%';
-    public databaseTemplate: string = '%endpoint%';
-    public cootiesThreshold: number = 50;
-    public pollDelay: number = 3;
-    public status: StatusList = new StatusList();
-    public compression: boolean = true;
-    public requestTimeout: number = 15;
+    public uriTemplate = '%rootUri%/%endpoint%';
+    public databaseTemplate = '%endpoint%';
+    public cootiesThreshold = 50;
+    public pollDelay = 3;
+    public status = new StatusList();
+    public compression = true;
+    public requestTimeout = 15;
 }
 
 export class StatusList {
@@ -109,9 +109,9 @@ export class StatusConfig {
         result.flavors = Deserialize.list(input, 'flavors', defaults.flavors);
         return result;
     };
-    public display: string = '';
-    public maxWait: number = 0;
-    public baseSatisfaction: number = 0;
+    public display = '';
+    public maxWait = 0;
+    public baseSatisfaction = 0;
     public flavors: string[] = [''];
 }
 
