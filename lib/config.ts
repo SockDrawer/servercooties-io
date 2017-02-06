@@ -1,8 +1,12 @@
+import {Resolver, Rejector} from './helpers/promises';
+import * as jsyaml from 'js-yaml';
 import {Deserialize} from './helpers/deserialize';
+import * as fs from 'fs';
 
 export class CheckConfig {
     public static deserialize(input: Object): CheckConfig {
         const result = new CheckConfig();
+        result.name = Deserialize.string(input, 'name');
         result.rootUri = Deserialize.string(input, 'rootUri');
         result.uriTemplate = Deserialize.string(input, 'uriTemplate');
         result.servers = Deserialize.list(input, 'servers');
@@ -18,6 +22,8 @@ export class CheckConfig {
         }
         return result;
     }
+
+    public name: string = '';
     public rootUri: string = '';
     public servers: string[] = [];
     public endpoints: string[] = [];
@@ -109,9 +115,32 @@ export class StatusConfig {
     public flavors: string[] = [''];
 }
 
-export interface ConfigData {
-    database: string;
-    pollDelay: number;
-    checks: CheckConfig[];
-    status: StatusConfig[];
+export class ConfigData {
+    public static read(sourceFile: string): Promise<ConfigData> {
+        return new Promise((resolve: Resolver<ConfigData>, reject: Rejector): void => {
+            fs.readFile(sourceFile, {encoding: 'utf8', flag: 'r'}, (err: Error, data: string): void => {
+                if (err) {
+                    reject(err);
+                    return;
+                }
+                try {
+                    const result = new ConfigData(),
+                        obj = jsyaml.safeLoad(data);
+                    result.database = Deserialize.string(obj, 'database');
+                    if (!obj.checks) {
+                        reject(new Error('No checks specified. Invalid Config'));
+                    } else if (!Array.isArray(obj.checks)) {
+                        obj.checks = [obj.checks];
+                    }
+                    //tslint:disable:next-line no-any
+                    result.checks = obj.checks.map((check: any) => CheckConfig.deserialize(check));
+                    resolve(result);
+                } catch (e) {
+                    reject(e);
+                }
+            });
+        });
+    }
+    public database: string;
+    public checks: CheckConfig[];
 };

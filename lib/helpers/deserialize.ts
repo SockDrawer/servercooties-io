@@ -1,8 +1,9 @@
-//tslint:disable:next-line no-any
 export class Deserialize {
+    //tslint:disable:next-line no-any
     public static byName (data: any, name: string): any {
         return data !== undefined ? data[name] : undefined;
     }
+    //tslint:disable:next-line no-any
     public static boolean (data: any, name: string, defaultValue?: boolean): boolean {
         const value = Deserialize.byName(data, name);
         if (value === undefined) {
@@ -16,6 +17,7 @@ export class Deserialize {
         }
         return value;
     }
+    //tslint:disable:next-line no-any
     public static string (data: any, name: string, defaultValue?: string): string {
         const value = Deserialize.byName(data, name);
         if (!value) {
@@ -27,6 +29,7 @@ export class Deserialize {
         }
         return value || defaultValue;
     }
+    //tslint:disable:next-line no-any
     public static number (data: any, name: string, minValue?: number, maxValue?: number, defaultValue?: number): number {
         minValue = minValue !== undefined ? minValue : 0;
         maxValue = maxValue !== undefined ? maxValue : 100;
