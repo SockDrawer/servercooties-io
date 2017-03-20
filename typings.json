@@ -8,5 +8,8 @@
   },
   "globalDevDependencies": {
     "sinon-as-promised": "registry:dt/sinon-as-promised#4.0.0+20160618172117"
+  },
+  "devDependencies": {
+    "request": "registry:npm/request#2.69.0+20160428223725"
   }
 }

@@ -15,3 +15,4 @@
 /// <reference path="globals/sinon-as-promised/index.d.ts" />
 /// <reference path="globals/sinon/index.d.ts" />
 /// <reference path="globals/sqlite3/index.d.ts" />
+/// <reference path="modules/request/index.d.ts" />
